@@ -30,5 +30,20 @@ def run_scan(ip):
     
     return min(score, 100)  # Cap score at 100
 
+    def run_scan(ip):
+    try:
+        result = api.host(ip)
+        vulns = result.get('vulns', [])
+        ports = [service['port'] for service in result['data']]
+        score = calculate_score(vulns, ports)
+        
+        conn = connect()
+        cur = conn.cursor()
+        cur.execute("UPDATE targets SET score = %s WHERE ip = %s", (score, ip))
+        conn.commit()
+        conn.close()
+        
+        return {"ip": ip, "vulnerabilities": vulns, "score": score}
+    
     except shodan.APIError as e:
         return {"error": str(e)}
