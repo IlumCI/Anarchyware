@@ -75,6 +75,30 @@ def calculate_score(vulns, ports, domain):
         score += 10  # Expiring SSL certs get flagged
     
     return min(score, 100)  # Cap at 100
+def run_scan(ip, domain):
+    try:
+        result = api.host(ip)
+        vulns = result.get('vulns', [])
+        ports = [service['port'] for service in result['data']]
+        
+        # WHOIS and SSL Integration
+        ssl_result = check_ssl(domain)
+        age = get_domain_age(domain)
+        score = calculate_score(vulns, ports, domain)
+        
+        # Store Data
+        conn = connect()
+        cur = conn.cursor()
+        cur.execute("""
+            UPDATE targets SET score = %s, ssl_valid_days = %s, domain_age = %s WHERE ip = %s
+        """, (score, ssl_result.get('valid_days'), age, ip))
+        conn.commit()
+        conn.close()
+        
+        return {"ip": ip, "score": score, "ssl_days": ssl_result.get('valid_days')}
+    
+    except shodan.APIError as e:
+        return {"error": str(e)}
 
     
     except shodan.APIError as e:
