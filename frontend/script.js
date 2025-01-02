@@ -12,14 +12,14 @@ fetch('/api/targets')
     .then(response => response.json())
     .then(data => {
         data.forEach(target => {
-            let marker = L.circleMarker([target.lat, target.lon], {
-                radius: 8,
-                color: getMarkerColor(target.score)
-            }).addTo(map)
-            .bindPopup(`
-                <b>${target.name}</b><br>
-                Industry: ${target.industry}<br>
-                Score: ${target.score}/100
-            `);
+            let marker = L.marker([target.lat, target.lon])
+                .addTo(map)
+                .bindPopup(`
+                    <b>${target.name}</b><br>
+                    Industry: ${target.industry}<br>
+                    Score: ${target.score}/100<br>
+                    SSL Validity: ${target.ssl_valid_days} days<br>
+                    Domain Age: ${target.domain_age} years
+                `);
         });
     });
