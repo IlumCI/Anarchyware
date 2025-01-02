@@ -24,3 +24,13 @@ def add_score_column():
     conn.commit()
     conn.close()
 
+def add_ssl_columns():
+    conn = connect()
+    cur = conn.cursor()
+    cur.execute("ALTER TABLE targets ADD COLUMN domain VARCHAR(255);")
+    cur.execute("ALTER TABLE targets ADD COLUMN ssl_valid_days INT;")
+    cur.execute("ALTER TABLE targets ADD COLUMN domain_age INT;")
+    conn.commit()
+    conn.close()
+
+
