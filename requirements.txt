@@ -3,3 +3,14 @@ requests
 beautifulsoup4
 shodan
 psycopg2
+paramiko
+smtplib
+faker
+email-validator
+hibpcli
+PyGithub
+selenium
+beautifulsoup4
+undetected-chromedriver
+pyOpenSSL
+python-whois
