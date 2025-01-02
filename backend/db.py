@@ -33,4 +33,29 @@ def add_ssl_columns():
     conn.commit()
     conn.close()
 
+def add_social_columns():
+    conn = connect()
+    cur = conn.cursor()
+    
+    # Store employee data
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS employees (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(255),
+            profile_url VARCHAR(255),
+            company VARCHAR(255)
+        );
+    """)
+    
+    # Store breach data
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS email_breaches (
+            id SERIAL PRIMARY KEY,
+            email VARCHAR(255),
+            breach_name VARCHAR(255),
+            company VARCHAR(255)
+        );
+    """)
+    conn.commit()
+    conn.close()
 
