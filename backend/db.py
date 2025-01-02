@@ -16,3 +16,11 @@ def get_targets():
     targets = cur.fetchall()
     conn.close()
     return [{"name": t[0], "industry": t[1], "ip": t[2]} for t in targets]
+
+def add_score_column():
+    conn = connect()
+    cur = conn.cursor()
+    cur.execute("ALTER TABLE targets ADD COLUMN score FLOAT DEFAULT 0.0;")
+    conn.commit()
+    conn.close()
+
